@@ -13,15 +13,8 @@ const rl = readline.createInterface({
 });
 
 // Function to search for social media accounts based on username or phone number
-async function searchSocialMediaAccounts(query, searchType) {
-  let searchQuery;
-
-  // Determine search query based on searchType
-  if (searchType === 'username') {
-    searchQuery = `site:twitter.com ${query} OR site:facebook.com ${query} OR site:instagram.com ${query} OR site:linkedin.com ${query}`;
-  } else if (searchType === 'phone') {
-    searchQuery = `site:twitter.com ${query} OR site:facebook.com ${query} OR site:instagram.com ${query} OR site:linkedin.com ${query}`;
-  }
+async function searchSocialMediaAccounts(query) {
+  const searchQuery = `site:twitter.com ${query} OR site:facebook.com ${query} OR site:instagram.com ${query} OR site:linkedin.com ${query}`;
 
   console.log(`Searching for: ${searchQuery}`);
 
@@ -113,14 +106,14 @@ function logUserInformation(userData) {
 
 // Main function to run the search
 async function main() {
-  rl.question('Do you want to search by username, phone number, or field and location? (Enter "username", "phone", or "field"): ', async (searchType) => {
-    if (searchType !== 'username' && searchType !== 'phone' && searchType !== 'field') {
-      console.log('Invalid choice. Please enter either "username", "phone", or "field".');
+  rl.question('Do you want to search by username, phone number, or field and location? (Enter [1] "username",[2] "phone",[3] "field"): ', async (searchType) => {
+    if (![ '1', '2', '3'].includes(searchType)) {
+      console.log('Invalid choice. Please enter either "1", "2", or "3".');
       rl.close();
       return;
     }
 
-    if (searchType === 'field') {
+    if (searchType === '3') {
       rl.question('Please enter the field you want to search for (e.g., programming, marketing): ', async (field) => {
         rl.question('Please enter the location (e.g., Egypt, Cairo): ', async (location) => {
           const socialLinks = await searchByFieldAndLocation(field, location);
@@ -165,10 +158,10 @@ async function main() {
         });
       });
     } else {
-      rl.question(`Please enter the ${searchType} you want to search for: `, async (query) => {
+      rl.question(`Please enter the Keyword:`, async (query) => {
         console.log(`Searching for social media accounts of: ${query}`);
 
-        const socialLinks = await searchSocialMediaAccounts(query, searchType);
+        const socialLinks = await searchSocialMediaAccounts(query);
 
         console.log('Found links:');
 
